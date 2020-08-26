@@ -1,4 +1,4 @@
-gg_epicurve <- function(df_cases,
+ggepicurve <- function(df_cases,
                         date = "1. pos. LaborDiagnose",
                         epi_squares = FALSE,
                         fill_aes = NULL,
@@ -7,14 +7,13 @@ gg_epicurve <- function(df_cases,
                         time_breaks = function(x) x,
                         time_labels = function(x) x,
                         start_date = NULL,
-                        end_date = Sys.Date(),
+                        end_date = NULL,
                         gg_first = NULL,
                         color_scheme = NULL,
                         bar_par = list()) {
 
 
   # input checks ------------------------------------------------------------
-
   checkmate::assert_subset(time_unit,c(
     "day",
     "week",
@@ -44,6 +43,9 @@ gg_epicurve <- function(df_cases,
   if (is.null(start_date))
     start_date <- min(dat$date_used)
 
+  if (is.null(end_date))
+    end_date <- max(dat$date_used)
+
   time_range <- start_date + 0:(end_date - start_date)
   time_range <- unique(transform_time(time_range, time_unit))
 
@@ -52,9 +54,7 @@ gg_epicurve <- function(df_cases,
   dat$time_unit <- factor(as.character(transform_time(dat$date_used, time_unit)),
                           levels = as.character(time_range))
 
-
-  if (is.numeric(epi_squares))
-    epi_squares <- max(table(dat$time_unit)) <= epi_squares
+  # epi_squares <- max(table(dat$time_unit)) <= epi_squares
 
   # initialize plot ---------------------------------------------------------
 
@@ -64,25 +64,23 @@ gg_epicurve <- function(df_cases,
 
   # depending on episquares add correct layer -------------------------------
 
-  if (is.null(bar_par$col))
-    bar_par$col <-  "black"
 
-  if (is.null(bar_par$width))
-    bar_par$width <-  1
+  bar_par0 <- list(geom = "col",
+                   col = "black",
+                   width = 1,
+                   position = "stack",
+                   mapping = aes(fill = !!fill_aes,
+                                 y = 1),
+                   max_squares = case_when(is.numeric(epi_squares) ~ as.numeric(epi_squares),
+                                           epi_squares == TRUE ~ Inf,
+                                           epi_squares == FALSE ~ 0),
+                   fun.y = identity,
+                   fun.ymax = sum)
 
-  if (epi_squares & is.null(bar_par$stat))
-    bar_par$stat <- "identity"
+  bar_par <- utils::modifyList(bar_par0, bar_par)
 
-  if (is.null(bar_par$mapping)) {
-    if (epi_squares) {
-      bar_par$mapping <- aes(fill = !!fill_aes,
-                             y = 1)
-    } else {
-      bar_par$mapping <- aes(fill = !!fill_aes)
-    }
-  }
 
-  gg <- gg + do.call(geom_bar, bar_par)
+  gg <- gg + do.call(stat_episquares, bar_par)
 
   # add labels if set (only with episquares)
   if (!quo_is_null(label_aes)) {
@@ -98,7 +96,6 @@ gg_epicurve <- function(df_cases,
 
 
   # add rest of stuff -------------------------------------------------------
-
   gg <- gg +
     scale_x_discrete(breaks = time_breaks,
                      labels = time_labels,
@@ -141,8 +138,3 @@ gg_epicurve <- function(df_cases,
   gg
 
 }
-
-
-
-
-

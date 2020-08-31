@@ -1,3 +1,11 @@
+#' Create a ggepicurve plot
+#'
+#'@export
+#'@import ggplot2
+#'@import rlang
+#'@import scales
+#'@import dplyr
+
 ggepicurve <- function(df_cases,
                         date = "1. pos. LaborDiagnose",
                         epi_squares = FALSE,
@@ -80,7 +88,7 @@ ggepicurve <- function(df_cases,
   bar_par <- utils::modifyList(bar_par0, bar_par)
 
 
-  gg <- gg + do.call(stat_episquares, bar_par)
+  gg <- gg + do.call(ggepicurve:::stat_episquares, bar_par)
 
   # add labels if set (only with episquares)
   if (!quo_is_null(label_aes)) {

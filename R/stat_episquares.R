@@ -41,6 +41,25 @@ StatEpisquares <- ggproto("StatEpisquares", Stat,
 
                             fun <- ggplot2:::make_summary_fun(fun.data, fun.y, fun.ymax, fun.ymin, fun.args)
                             out_dat <- ggplot2:::summarise_by_x(data, fun)
+                            browser()
+
+
+
+                            # scales$x$limits <- scales$x$range$range[range(out_dat$x)[1]:range(out_dat$x)[2]]
+                            # scales$x$range$range <- scales$x$range$range[range(out_dat$x)[1]:range(out_dat$x)[2]]
+                            # out_dat$x <- out_dat$x - min(out_dat$x)
+
+                            # if(x_scale = "year")
+
+                            first_case_of_year <- scales$x$range$range[min(out_dat$x)]
+                            year <- unique(format(as.Date(scales$x$range$range[range(out_dat$x)[1]:range(out_dat$x)[2]]), "%Y"))
+                            year_dates <- seq(as.Date(paste0(year,"-01-01")), as.Date(paste0(year,"-12-31")), by = 1)
+
+                            scales$x$limits <- year_dates
+                            scales$x$range$range <- year_dates
+                            out_dat$x <- out_dat$x - min(out_dat$x) + which(first_case_of_year == year_dates) - 1
+
+
 
                             if(any(out_dat %>% group_by(x) %>% summarise(n = n()) %>% pull(n) > max_squares))
                               out_dat <- out_dat %>%

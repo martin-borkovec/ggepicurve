@@ -1,5 +1,4 @@
-# transform_time helper function ------------------------------------------
-
+#' @export
 
 transform_time <- function(x, time_unit) {
 

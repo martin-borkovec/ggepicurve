@@ -1,3 +1,4 @@
+#' @export
 annotation_date <- function(time_unit = "month",
                             y_percentage = 0.075,
                             extra_lines = 0,
@@ -19,7 +20,6 @@ annotation_date <- function(time_unit = "month",
                          type = "segment")
 
   params_segment <- c(params_segment, line_par)
-
   list(
     layer(
       data = NULL,
@@ -29,16 +29,16 @@ annotation_date <- function(time_unit = "month",
       mapping = aes(y = 1,
                     label = stat(time_label)),
       params = params_text),
-    theme(panel.spacing = unit(extra_lines, "lines"),
-          plot.margin = unit(c(0, 0, extra_lines, 0), "lines")),
-    coord_cartesian0(clip = "off"),
     layer(
       data = NULL,
       geom = "segment",
       stat = StatDateLabel,
       position = "identity",
       mapping = aes(y = 1),
-      params = params_segment))
+      params = params_segment),
+    theme(panel.spacing = unit(extra_lines, "lines"),
+          plot.margin = unit(c(0, 0, extra_lines, 0), "lines")),
+    coord_cartesian0(clip = "off"))
 }
 
 
@@ -50,11 +50,14 @@ StatDateLabel <- ggproto("StatDateLabel", Stat,
                                                   na.rm = FALSE, time_unit = NULL, format = NULL,
                                                   y_percentage = NULL, type = type) {
 
-                           fun <- ggplot2:::make_summary_fun(fun.data, fun.y, fun.ymax, fun.ymin, fun.args)
+                           browser()
+                           fun <- ggplot2:::make_summary_fun(NULL, fun.y, fun.ymax, fun.ymin, fun.args)
                            out_dat <- ggplot2:::summarise_by_x(data, fun)
                            y_max <- out_dat %>%
-                             group_by(x) %>%
+                             group_by(x, PANEL) %>%
                              summarise(n = n()) %>% pull(n) %>% max
+
+
 
                            time_label <- data.frame(time_label = do.call(what = ISOformat,
                                                                          args = list(x = transform_time(as.Date(scales$x$range$range), time_unit),

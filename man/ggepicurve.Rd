@@ -5,10 +5,10 @@
 \title{Create a ggepicurve plot}
 \usage{
 ggepicurve(
-  df_cases,
-  date = "1. pos. LaborDiagnose",
+  data,
+  date,
+  mapping = list(),
   epi_squares = FALSE,
-  fill_aes = NULL,
   label_aes = NULL,
   time_unit = "day",
   time_breaks = function(x) x,
@@ -17,7 +17,8 @@ ggepicurve(
   end_date = NULL,
   gg_first = NULL,
   color_scheme = NULL,
-  bar_par = list()
+  bar_par = list(),
+  x_scale = NULL
 )
 }
 \description{

@@ -1,25 +1,39 @@
 #' @export
 annotation_date <- function(time_unit = "month",
                             y_percentage = 0.075,
+                            y_scale = NULL,
                             extra_lines = 0,
                             text_par = list(),
                             line_par = list(),
                             format = "%Y-%m-%d") {
 
+  if (!is.null(format)) {
+    format <-   switch(time_unit,
+                       week = "%ISOW",
+                       month = "%b",
+                       year = "%Y"
+                       )
+  }
 
   params_text <- list(time_unit = time_unit,
                       format = format,
                       y_percentage = y_percentage,
-                      type = "text")
+                      y_scale = y_scale,
+                      type = "text",
+                      size = 4)
 
-  params_text <- c(params_text, text_par)
+  # browser()
+  params_text <- utils::modifyList(params_text, text_par)
 
   params_segment <- list(time_unit = time_unit,
                          format = format,
                          y_percentage = y_percentage,
-                         type = "segment")
+                         y_scale = y_scale,
+                         type = "segment",
+                         text_size = params_text$size)
 
   params_segment <- c(params_segment, line_par)
+
   list(
     layer(
       data = NULL,
@@ -45,13 +59,18 @@ annotation_date <- function(time_unit = "month",
 StatDateLabel <- ggproto("StatDateLabel", Stat,
                          required_aes = c("x"),
                          clip = "off",
-                         compute_panel = function(data, scales, fun.data = NULL, fun.y = identity,
-                                                  fun.ymax = sum, fun.ymin = NULL, fun.args = list(),
-                                                  na.rm = FALSE, time_unit = NULL, format = NULL,
-                                                  y_percentage = NULL, type = type) {
+                         compute_panel = function(data,
+                                                  scales,
+                                                  layout = layout,
+                                                  na.rm = FALSE,
+                                                  time_unit = NULL,
+                                                  format = NULL,
+                                                  y_percentage = NULL,
+                                                  y_scale = NULL,
+                                                  type = type,
+                                                  text_size = NULL) {
 
-                           browser()
-                           fun <- ggplot2:::make_summary_fun(NULL, fun.y, fun.ymax, fun.ymin, fun.args)
+                           fun <- ggplot2:::make_summary_fun(NULL, identity, sum, NULL, NULL)
                            out_dat <- ggplot2:::summarise_by_x(data, fun)
                            y_max <- out_dat %>%
                              group_by(x, PANEL) %>%
@@ -69,7 +88,7 @@ StatDateLabel <- ggproto("StatDateLabel", Stat,
                              group_by(time_label_year) %>%
                              summarise(n = n(),
                                        time_label = time_label[1]) %>%
-                             mutate(time_label = case_when(n < max(n) / 2 ~ "",
+                             mutate(time_label = case_when(n < max(n) / 3 ~ "",
                                                            TRUE ~ as.character(time_label)),
                                     x = cumsum(n) - n / 2 + 0.5)
 
@@ -80,9 +99,14 @@ StatDateLabel <- ggproto("StatDateLabel", Stat,
                            data.frame(
                              x = cumsum(time_label$n)[-nrow(time_label)] + 0.5,
                              xend = cumsum(time_label$n)[-nrow(time_label)] + 0.5,
-                             y = -y_max * (y_percentage + 0.05),
+                             y = -y_max * y_percentage  - 0.025 * y_max * text_size / 4,
                              yend = 0)
-
-
+                         },
+                         finish_layer = function(self, data, params) {
+                           if (!is.null(params$y_scale) && params$y_scale == "fixed") data$y = min(data$y)
+                           data
                          }
+
+
+
 )

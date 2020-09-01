@@ -1,0 +1,48 @@
+---
+title: "ggepicurve"
+author: "Martin Borkovec"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ggepicurve}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}   
+---
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+collapse = TRUE,
+comment = "#>",
+fig.width = 7
+)
+Sys.setlocale(locale = "English")
+```
+
+
+# Plots 
+
+```{r}
+library(ggepicurve)
+library(outbreaks)
+dat <- outbreaks::ebola_sim_clean$linelist
+
+
+ggepicurve(dat,
+           date = "date_of_onset",
+           time_labels = labels_7days,
+            )
+          
+```
+
+```{r}
+ggepicurve(dat,
+           date = "date_of_onset") +
+  theme(axis.text.x = element_blank()) +
+  annotation_date(time_unit = "month", format = "%b", y_percentage = 0.05) +
+  annotation_date(time_unit = "year", format = "%Y", y_percentage = 0.15, extra_lines = 2)
+```
+

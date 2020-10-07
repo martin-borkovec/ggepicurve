@@ -35,25 +35,26 @@ StatEpicurve <- ggproto("StatEpicurve", Stat,
 
                             # browser()
 
-                            if(!is.null(x_scale) && x_scale == "year") {
+                            if (!is.null(x_scale) && x_scale == "year") {
                               first_case_of_year <- scales$x$range$range[min(out_dat$x)]
                               year <- unique(format(as.Date(scales$x$range$range[range(out_dat$x)[1]:range(out_dat$x)[2]]), "%Y"))
-                              year_dates <- seq(as.Date(paste0(year,"-01-01")), as.Date(paste0(year,"-12-31")), by = 1)
+                              year_dates <- as.character(seq(as.Date(paste0(year,"-01-01")), as.Date(paste0(year,"-12-31")), by = 1))
 
-                              scales$x$limits <- year_dates
+                              # scales$x$limits <- year_dates
                               scales$x$range$range <- year_dates
                               out_dat$x <- out_dat$x - min(out_dat$x) + which(first_case_of_year == year_dates) #- 1
 
-                            } else {
-                              browser()
+                            }
+                            if (!is.null(x_scale) && x_scale == "free") {
+                              # browser()
                               #
-                              scales$x$limits <- scales$x$range$range[range(out_dat$x)[1]:range(out_dat$x)[2]]
+                              # scales$x$limits <- scales$x$range$range[range(out_dat$x)[1]:range(out_dat$x)[2]]
                               scales$x$range$range <- scales$x$range$range[range(out_dat$x)[1]:range(out_dat$x)[2]]
                               out_dat$x <- out_dat$x - min(out_dat$x) + 1
                             }
 
 
-                            if(any(out_dat %>% group_by(x) %>% summarise(n = n()) %>% pull(n) > max_squares)) {
+                            if (any(out_dat %>% group_by(x) %>% summarise(n = n()) %>% pull(n) > max_squares)) {
                               out_dat <- out_dat %>%
                               group_by(group) %>%
                               mutate(.index = 1:n()) %>%

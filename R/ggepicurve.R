@@ -17,7 +17,7 @@ ggepicurve <- function(data,
                        start_date = NULL,
                        end_date = NULL,
                        gg_first = NULL,
-                       color_scheme = NULL,
+                       # color_scheme = NULL,
                        bar_par = list(),
                        x_scale = NULL) {
 
@@ -33,7 +33,7 @@ ggepicurve <- function(data,
     "year",
     "custom"))  # custom not worked out yet
 
-  checkmate::assert_subset(color_scheme,c("bundesland", "covid_quelle"))
+  # checkmate::assert_subset(color_scheme,c("bundesland", "covid_quelle"))
   checkmate::assert_subset(date, names(data), empty.ok = FALSE)
 
 
@@ -119,27 +119,24 @@ ggepicurve <- function(data,
           axis.title = element_text(face = "bold"),
           axis.text.x = element_text(angle = 40, hjust = 1, vjust = 1),
           legend.position = "top",
-          legend.direction = "horizontal",
-          legend.background = element_rect(fill = NA),
-          legend.key = element_blank(),
-          legend.title = element_blank()) +
+          legend.direction = "horizontal") +
     scale_y_continuous("",
                        expand = c(0, 0), breaks = my_pretty_breaks(10))
 
 
   # add color_scheme --------------------------------------------------------
 
-  if (!is.null(color_scheme)) {
-    if (color_scheme == "bundesland") {
-      cols <- epitools::colorbrewer.palette(nclass = 9, type = "q", palette = "a")
-      cols[5] <- "gold1"
-
-    }
-    if (color_scheme == "covid_quelle") {
-      cols <- c("#c1c1bd", "limegreen", "#4056a1", "#d79922", "#225b30", "#d08582", "#af2a2a", "white")
-    }
-    gg <- gg + scale_fill_manual(values = cols, drop = FALSE)
-  }
+  # if (!is.null(color_scheme)) {
+  #   if (color_scheme == "bundesland") {
+  #     cols <- epitools::colorbrewer.palette(nclass = 9, type = "q", palette = "a")
+  #     cols[5] <- "gold1"
+  #
+  #   }
+  #   if (color_scheme == "covid_quelle") {
+  #     cols <- c("#c1c1bd", "limegreen", "#4056a1", "#d79922", "#225b30", "#d08582", "#af2a2a", "white")
+  #   }
+  #   gg <- gg + scale_fill_manual(values = cols, drop = FALSE)
+  # }
 
   gg
 

@@ -33,6 +33,8 @@ StatEpicurve <- ggproto("StatEpicurve", Stat,
                             fun <- ggplot2:::make_summary_fun(NULL, identity, sum, NULL, NULL)
                             out_dat <- ggplot2:::summarise_by_x(data, fun)
 
+                            # browser()
+
                             if(!is.null(x_scale) && x_scale == "year") {
                               first_case_of_year <- scales$x$range$range[min(out_dat$x)]
                               year <- unique(format(as.Date(scales$x$range$range[range(out_dat$x)[1]:range(out_dat$x)[2]]), "%Y"))
@@ -40,9 +42,11 @@ StatEpicurve <- ggproto("StatEpicurve", Stat,
 
                               scales$x$limits <- year_dates
                               scales$x$range$range <- year_dates
-                              out_dat$x <- out_dat$x - min(out_dat$x) + which(first_case_of_year == year_dates) - 1
-                            } else {
+                              out_dat$x <- out_dat$x - min(out_dat$x) + which(first_case_of_year == year_dates) #- 1
 
+                            } else {
+                              browser()
+                              #
                               scales$x$limits <- scales$x$range$range[range(out_dat$x)[1]:range(out_dat$x)[2]]
                               scales$x$range$range <- scales$x$range$range[range(out_dat$x)[1]:range(out_dat$x)[2]]
                               out_dat$x <- out_dat$x - min(out_dat$x) + 1

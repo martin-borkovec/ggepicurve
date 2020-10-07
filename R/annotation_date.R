@@ -52,7 +52,7 @@ annotation_date <- function(time_unit = "month",
       params = params_segment),
     theme(panel.spacing = unit(extra_lines, "lines"),
           plot.margin = unit(c(0, 0, extra_lines, 0), "lines")),
-    coord_cartesian0(clip = "off"))
+    coord_cartesian(clip = "off", ylim = c(0, NA)))
 }
 
 
@@ -76,8 +76,6 @@ StatDateLabel <- ggproto("StatDateLabel", Stat,
                              group_by(x, PANEL) %>%
                              summarise(n = n()) %>% pull(n) %>% max
 
-
-
                            time_label <- data.frame(time_label = do.call(what = ISOformat,
                                                                          args = list(x = transform_time(as.Date(scales$x$range$range), time_unit),
                                                                                      format)),
@@ -95,6 +93,7 @@ StatDateLabel <- ggproto("StatDateLabel", Stat,
                            time_label$y <- -y_max * y_percentage
 
                            if(type == "text") return (time_label)
+                           if(nrow(time_label) == 1) return(data.frame())
 
                            data.frame(
                              x = cumsum(time_label$n)[-nrow(time_label)] + 0.5,

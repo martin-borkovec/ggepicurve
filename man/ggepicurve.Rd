@@ -8,19 +8,41 @@ ggepicurve(
   data,
   date,
   mapping = list(),
-  epi_squares = FALSE,
-  label_aes = NULL,
-  time_unit = "day",
-  time_breaks = function(x) x,
-  time_labels = function(x) x,
+  epi_blocks = FALSE,
+  date_unit = "day",
+  date_breaks = function(x) x,
+  date_labels = function(x) x,
   start_date = NULL,
   end_date = NULL,
   gg_first = NULL,
-  color_scheme = NULL,
-  bar_par = list(),
+  col_par = list(),
   x_scale = NULL
 )
 }
+\arguments{
+\item{data}{Data set in which each line represents a case. Has to contain column of class date. For aggregated data (e.g. weekly cases) any date of the aggregation period (e.g. monday) can be used.}
+
+\item{date}{Name of column which contains date by which cases are to be plotted.}
+
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{ggplot2::aes()}} or \code{\link[ggplot2:aes_]{ggplot2::aes_()}} for \code{\link[ggplot2:geom_bar]{ggplot2::geom_col()}}. This will not count as the default mapping at the top level of the plot.}
+
+\item{epi_blocks}{Schould each case be plotted as a separate block? Can be TRUE, FALSE or a numeric. If it's a numeric, blocks will be drawn if the highest case count of the panel doesn't surpass its value.}
+
+\item{date_unit}{Should the data be aggregated? Defaults to "day" (i.e. no aggregation). Other possible values are "week", "month", "quarter" and "year".}
+
+\item{start_date}{Start date of x axis. Character string in "YYYY-MM-DD" format.}
+
+\item{end_date}{End date of x axis. Character string in "YYYY-MM-DD" format.}
+
+\item{gg_first}{List of gg objects to plot before (backgorund of) the epicurve.}
+
+\item{col_par}{Additional parameters for the geom_col call.}
+
+\item{facet_x_scale}{Should be only used when creating a faceted plot with a free x scale.}
+}
 \description{
-Create a ggepicurve plot
+some text
+}
+\details{
+some more text
 }

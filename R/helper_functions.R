@@ -9,6 +9,15 @@ my_pretty_breaks <- function (n = 5) {
   }
 }
 
+#' @export
+labels_days <- function(n = 2){
+  n_default <- n
+  function(x, n = n_default) {
+    out <- character(length(x))
+    out[c(1, 1:((length(x) - 1) / n) * n + 1)]  <- x[c(1, 1:((length(x) - 1) / n) * n + 1)]
+    out
+  }
+}
 
 
 #day

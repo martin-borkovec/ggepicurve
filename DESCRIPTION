@@ -1,17 +1,19 @@
 Package: ggepicurve
-Title: What the Package Does (One Line, Title Case)
+Title: Plots of case based epidemiological data
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+    person("Martin", "Borkovec", role = c("aut", "cre"), email = "martin.borkovec@skyforge.at")
 Description: What the package does (one paragraph).
+Maintainer: Martin Borkovec <martin.borkovec@skyforge.at>
 Depends:
-  ggplot2
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
+    ggplot2,
+    dplyr,
+    rlang,
+    scales,
+    R (>= 2.10)
+License: GPL-3
+URL: https://github.com/martin-borkovec/ggepicurve
+BugReports: https://github.com/martin-borkovec/ggepicurve/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

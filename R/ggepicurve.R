@@ -1,5 +1,23 @@
 #' Create a ggepicurve plot
 #'
+#'some text
+#'
+#'some more text
+#'
+#'@param mapping 	Set of aesthetic mappings created by [ggplot2::aes()] or [ggplot2::aes_()] for [ggplot2::geom_col()]. This will not count as the default mapping at the top level of the plot.
+#'@param data Data set in which each line represents a case. Has to contain column of class date. For aggregated data (e.g. weekly cases) any date of the aggregation period (e.g. monday) can be used.
+#'@param date Name of column which contains date by which cases are to be plotted.
+#'@param epi_blocks Schould each case be plotted as a separate block? Can be TRUE, FALSE or a numeric. If it's a numeric, blocks will be drawn if the highest case count of the panel doesn't surpass its value.
+#'@param date_unit Should the data be aggregated? Defaults to "day" (i.e. no aggregation). Other possible values are "week", "month", "quarter" and "year".
+#'@param date_breaks
+#'@param date_labels
+#'@param start_date Start date of x axis. Character string in "YYYY-MM-DD" format.
+#'@param end_date End date of x axis. Character string in "YYYY-MM-DD" format.
+#'@param gg_first List of gg objects to plot before (backgorund of) the epicurve.
+#'@param col_par Additional parameters for the geom_col call.
+#'@param facet_x_scale Should be only used when creating a faceted plot with a free x scale.
+#'
+#'
 #'@export
 #'@import ggplot2
 #'@import rlang
@@ -9,23 +27,21 @@
 ggepicurve <- function(data,
                        date,
                        mapping = list(),
-                       epi_squares = FALSE,
-                       label_aes = NULL,
-                       time_unit = "day",
-                       time_breaks = function(x) x,
-                       time_labels = function(x) x,
+                       epi_blocks = FALSE,
+                       date_unit = "day",
+                       date_breaks = function(x) x,
+                       date_labels = function(x) x,
                        start_date = NULL,
                        end_date = NULL,
                        gg_first = NULL,
-                       # color_scheme = NULL,
-                       bar_par = list(),
+                       col_par = list(),
                        x_scale = NULL) {
 
 
   # input checks ------------------------------------------------------------
 
 
-  checkmate::assert_subset(time_unit,c(
+  checkmate::assert_subset(date_unit,c(
     "day",
     "week",
     "month",
@@ -46,54 +62,55 @@ ggepicurve <- function(data,
   data$date_used <- data[[date]]
   if (!is.null(start_date) & is.character(start_date))
     start_date <- as.Date(start_date)
+  if (!is.null(end_date) & is.character(end_date))
+    end_date <- as.Date(end_date)
 
 
-  # get factor time_range with levels for each possible  value --------------
+  # get factor date_range with levels for each possible  value --------------
   if (is.null(start_date))
     start_date <- min(data$date_used)
 
   if (is.null(end_date))
     end_date <- max(data$date_used)
 
-  time_range <- start_date + 0:(end_date - start_date)
-  time_range <- unique(transform_time(time_range, time_unit))
+  date_range <- start_date + 0:(end_date - start_date)
+  date_range <- unique(transform_time(date_range, date_unit))
 
 
-  # create column time_unit with allocation of each case --------------------
-  data$.time_unit <- factor(as.character(transform_time(data$date_used, time_unit)),
-                          levels = as.character(time_range))
+  # create column date_unit with allocation of each case --------------------
+  data$.date_unit <- factor(as.character(transform_time(data$date_used, date_unit)),
+                          levels = as.character(date_range))
 
-  # epi_squares <- max(table(dat$time_unit)) <= epi_squares
 
   # initialize plot ---------------------------------------------------------
 
-  gg <- ggplot(data, aes(x = .time_unit)) +
+  gg <- ggplot(data, aes(x = .date_unit, y = 1)) +
     gg_first
 
 
   # depending on episquares add correct layer -------------------------------
-  bar_par0 <- list(geom = "col",
+  col_par0 <- list(geom = "col",
                    col = "black",
                    width = 1,
                    position = "stack",
-                   mapping = aes(y = 1),
-                   max_squares = case_when(is.numeric(epi_squares) ~ as.numeric(epi_squares),
-                                           epi_squares == TRUE ~ Inf,
-                                           epi_squares == FALSE ~ 0),
+                   mapping = aes(),
+                   max_squares = case_when(is.numeric(epi_blocks) ~ as.numeric(epi_blocks),
+                                           epi_blocks == TRUE ~ Inf,
+                                           epi_blocks == FALSE ~ 0),
                    x_scale = x_scale)
 
-  bar_par <- utils::modifyList(bar_par0, bar_par)
-  bar_par$mapping <- utils::modifyList(bar_par$mapping, mapping)
+  col_par <- utils::modifyList(col_par0, col_par)
+  col_par$mapping <- utils::modifyList(col_par$mapping, mapping)
 
-  gg <- gg + do.call(ggepicurve:::stat_epicurve, bar_par)
+  gg <- gg + do.call(ggepicurve:::stat_epicurve, col_par)
 
   # add labels if set (only with episquares)
   # if (!quo_is_null(label_aes)) {
-  #   if (epi_squares) {
+  #   if (epi_blocks) {
   #     gg <- gg + geom_text(aes(label = !!label_aes, y = 1, group = !!fill_aes),
   #                          position = position_stack(vjust = 0.5))
   #   } else {
-  #     warning("epi_squares must be TRUE if label is to be printed")
+  #     warning("epi_blocks must be TRUE if label is to be printed")
   #   }
   #
   # }
@@ -102,8 +119,8 @@ ggepicurve <- function(data,
   # add rest of stuff -------------------------------------------------------
   gg <- gg +
     scale_x_discrete("",
-                     breaks = time_breaks,
-                     labels = time_labels,
+                     breaks = date_breaks,
+                     labels = date_labels,
                      drop = FALSE,
                      na.translate = FALSE) +
     theme(text = element_text(size = 12),

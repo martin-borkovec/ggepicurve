@@ -1,7 +1,7 @@
 # add date_label ----------------------------------------------------------
 
 add_date_label <- function(gg,
-                           time_unit = "month",
+                           date_unit = "month",
                            y_percentage = 0.075,
                            extra_lines = 2,
                            text_par = list(size = 6),
@@ -13,15 +13,15 @@ add_date_label <- function(gg,
 
 
 
-  time_range <- do.call(what = ISOformat,
-                        args = list(x = transform_time(as.Date(levels(gg$data$time_unit)), time_unit),
+  date_range <- do.call(what = ISOformat,
+                        args = list(x = transform_time(as.Date(levels(gg$data$date_unit)), date_unit),
                                     format))
 
-  time_label <- tibble(time_unit = factor(time_range, levels = unique(time_range))) %>%
-    group_by(time_unit) %>%
+  date_label <- tibble(date_unit = factor(date_range, levels = unique(date_range))) %>%
+    group_by(date_unit) %>%
     summarise(n = n()) %>%
-    mutate(time_unit = case_when(n < max(n) / 2 ~ "",
-                                 TRUE ~ as.character(time_unit)),
+    mutate(date_unit = case_when(n < max(n) / 2 ~ "",
+                                 TRUE ~ as.character(date_unit)),
            x = cumsum(n) - n / 2 + 0.5)
 
   text_par0 <- list(size = 6)
@@ -33,13 +33,13 @@ add_date_label <- function(gg,
   if (!facet) {
     gg +
       do.call(annotate, c(list(geom = "text",
-                               x = time_label$x,
+                               x = date_label$x,
                                y = -y_max * y_percentage,
-                               label = time_label$time_unit),
+                               label = date_label$date_unit),
                           text_par0)) +
       annotate(geom = "segment",
-               x = cumsum(time_label$n)[-nrow(time_label)] + 0.5,
-               xend = cumsum(time_label$n)[-nrow(time_label)] + 0.5,
+               x = cumsum(date_label$n)[-nrow(date_label)] + 0.5,
+               xend = cumsum(date_label$n)[-nrow(date_label)] + 0.5,
                y = -y_max * (y_percentage + 0.025 * text_par0$size / 6) ,
                yend = 0,
                colour = "black") +
@@ -51,11 +51,11 @@ add_date_label <- function(gg,
 
     anno_geoms <- list()
 
-    for (i in seq_len(nrow(time_label))) {
+    for (i in seq_len(nrow(date_label))) {
       anno_geoms[[i]] <- do.call(annotate, c(list(geom = "text",
-                                                  x = time_label$x[i],
+                                                  x = date_label$x[i],
                                                   y = -y_max * y_percentage,
-                                                  label = time_label$time_unit[i]),
+                                                  label = date_label$date_unit[i]),
                                              text_par0))
     }
 
@@ -63,8 +63,8 @@ add_date_label <- function(gg,
       anno_geoms +
       scale_y_continuous(expand = c(y_percentage + 0.075 * text_par0$size / 6,0)) +
       annotate(geom = "segment",
-               x = cumsum(time_label$n)[-nrow(time_label)] + 0.5,
-               xend = cumsum(time_label$n)[-nrow(time_label)] + 0.5,
+               x = cumsum(date_label$n)[-nrow(date_label)] + 0.5,
+               xend = cumsum(date_label$n)[-nrow(date_label)] + 0.5,
                y = -y_max * (y_percentage + 0.025 * text_par0$size / 6) ,
                yend = 0,
                colour = "black") +

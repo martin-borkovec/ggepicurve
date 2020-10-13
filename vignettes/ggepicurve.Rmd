@@ -28,21 +28,53 @@ Sys.setlocale(locale = "English")
 
 # Plots 
 
-```{r}
-dat <- readRDS("../inst/df_cases.RDS")
 
-ggepicurve(dat,
-           date = "date",
-           time_labels = labels_7days,
-            )
-          
+```{r}
+dat0 <- readRDS("../inst/df_cases.RDS")
+dat <- dat0[dat0$date <= as.Date("2011-06-30") & dat0$date > as.Date("2011-05-01"),]
 ```
 
+Using the default Settings, ggepicurve() doesn't do anything very special. As we can see even the dates without any cases are represented in the plot. However similar results could be achieved by simply using ggplot's scale_x_date().
+```{r}
+ggepicurve(dat,
+           date = "date")
+```
+
+Although our subset consists of all cases of May and June 2011, our plot starts at the 22nd of May. This is because ggepicurve's start date defaults to the first date of the data set. So if we want to make sure a specific time period is covered, we have to specify a start_ and/or an end_date.  
+Also the x_axis labels are bit crowded, so let's just print every fourth label. We can do this by passing a function to date_labels. This can be user any user specified or one of the provided helper funtions.
+```{r}
+ggepicurve(dat,
+           start_date = "2011-05-01",
+           end_date = "2011-06-30",
+           date = "date",
+           date_labels = labels_days(4)
+)
+```
+
+The x-axis labels still contain a lot of redundant information. So let's reduce them to the most relevant part and add some annotation for each month.  
+The function `labels_7days()`  trims the labels down to the day of the month and removes all labels, except for the 7th, 14th, 21st and 28th day of the month.  
+Additionaly we have to add some annotations for each month and a convenient way to do this is the `annotation_date()` function. date_unit controls for which unit of time the annotations are to be added and y_percentage controls the position of the annotations. Defining this as a percentage of the complete y-axis allows the positioning to be independent of the actual values of the y-axis (i.e. changing the range of the y-axis has no effect on the position of the date annotations). 
+
+```{r}
+ggepicurve(dat,
+           start_date = "2011-05-01",
+           end_date = "2011-06-30",
+           date = "date",
+           date_labels = labels_7days) +
+  annotation_date(date_unit = "month", y_percentage = 0.15)
+```
+
+`annotation_date()` function can be added multiple times. To illustrate this and the invariance of the y-position of the annotations let's recreate above plot for a larger subset.
+Since there's isn't any obvious way how to define optimal default values, you will probably have to try around a bit for each plot. However, once a satisfying position is found it should work for new or updated data just fine.
+
+```{r}
+dat <- dat0[dat0$date <= as.Date("2012-01-30") & dat0$date > as.Date("2011-05-01"),]
+```
 ```{r}
 ggepicurve(dat,
            date = "date") +
   theme(axis.text.x = element_blank()) +
-  annotation_date(time_unit = "month", format = "%b", y_percentage = 0.05) +
-  annotation_date(time_unit = "year", format = "%Y", y_percentage = 0.15, extra_lines = 2)
+  annotation_date(date_unit = "month", format = "%b", y_percentage = 0.05) +
+  annotation_date(date_unit = "year", format = "%Y", y_percentage = 0.15, extra_lines = 2)
 ```
 

@@ -16,12 +16,12 @@ text-align: justify}
 ```{r setup, include = FALSE}
 library(ggepicurve)
 
-
 knitr::opts_chunk$set(
 collapse = TRUE,
 comment = "#>",
 fig.width = 7
 )
+
 Sys.setlocale(locale = "English")
 ```
 
@@ -83,7 +83,7 @@ ggepicurve(dat,
 ggepicurve(dat,
            date_unit = "week",
            date = "date",
-           date_labels =  function(x) format(as.Date(x), "KW %W")) +
+           date_labels =  function(x) format(as.Date(x), "%W")) +
   annotation_date(date_unit = "month", format = "%b", y_percentage = 0.15) +
   annotation_date(date_unit = "year", format = "%Y", y_percentage = 0.25, extra_lines = 2)
 ```

@@ -7,7 +7,14 @@ plotting epicurves with **ggplot2**
 
 ``` r
 devtools::install_github("martin-borkovec/ggepicurve", 
-                         dependencies = TRUE)
+                         dependencies = TRUE,
+                         build_vignettes = TRUE)
+```
+
+Make sure to checkout the vignette.
+
+``` r
+vignette("ggepicurve", package = "ggepicurve")
 ```
 
 ## Example
@@ -36,4 +43,4 @@ ggepicurve(data = dat,
                   )
 ```
 
-![](man/figures/README-unnamed-chunk-2-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-3-1.png)<!-- -->

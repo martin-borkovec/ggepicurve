@@ -30,7 +30,7 @@ Sys.setlocale(locale = "English")
 
 
 ```{r}
-dat0 <- readRDS("../inst/df_cases.RDS")
+dat0 <- ggepicurve::sim_data
 dat <- dat0[dat0$date <= as.Date("2011-06-30") & dat0$date > as.Date("2011-05-01"),]
 ```
 

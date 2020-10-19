@@ -97,7 +97,8 @@ ggepicurve <- function(data,
                    max_squares = case_when(is.numeric(epi_blocks) ~ as.numeric(epi_blocks),
                                            epi_blocks == TRUE ~ Inf,
                                            epi_blocks == FALSE ~ 0),
-                   x_scale = x_scale)
+                   x_scale = x_scale,
+                   date_unit = date_unit)
 
   col_par <- utils::modifyList(col_par0, col_par)
   col_par$mapping <- utils::modifyList(col_par$mapping, mapping)

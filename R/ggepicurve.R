@@ -23,7 +23,7 @@
 #'@param end_date End date of X-axis. Character string in "YYYY-MM-DD" format.
 #'@param gg_first List of gg objects to plot before (backgorund of) the epicurve.
 #'@param col_par Additional parameters for the geom_col call.
-#'@param facet_x_scale Should be only used when creating a faceted plot with a free x scale.
+#'@param facet_x_scale Should be only used when creating a faceted plot with a free X-scale.
 #'@param suggested_theme Should suggested [ggplot2::theme()] adjustments be performed? Defaults to TRUE. See Details.
 #'
 #'
@@ -45,6 +45,7 @@ ggepicurve <- function(data,
                        gg_first = NULL,
                        col_par = list(),
                        x_scale = NULL,
+                       y_scale = NULL,
                        suggested_theme = TRUE) {
 
 

@@ -16,6 +16,7 @@ ggepicurve(
   gg_first = NULL,
   col_par = list(),
   x_scale = NULL,
+  y_scale = NULL,
   suggested_theme = TRUE
 )
 }
@@ -43,7 +44,7 @@ All cases of the respective date unit will be aggregated on the X-axis to its fi
 
 \item{suggested_theme}{Should suggested \code{\link[ggplot2:theme]{ggplot2::theme()}} adjustments be performed? Defaults to TRUE. See Details.}
 
-\item{facet_x_scale}{Should be only used when creating a faceted plot with a free x scale.}
+\item{facet_x_scale}{Should be only used when creating a faceted plot with a free X-scale.}
 }
 \value{
 ggepicurve returns a gg object consisiting of a call to at least \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}, \code{\link[ggplot2:scale_discrete]{ggplot2::scale_x_discrete()}}, \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}} and \code{\link[ggepicurve:::stat_epicurve]{ggepicurve::::stat_epicurve()}}.

@@ -7,7 +7,7 @@
 annotation_date(
   date_unit = "month",
   y_percentage = 0.075,
-  y_scale = NULL,
+  facet_y_scale = NULL,
   extra_lines = 0,
   text_par = list(),
   line_par = list(),
@@ -18,6 +18,8 @@ annotation_date(
 \item{date_unit}{character string setting the unit of time for which to add the annotations.}
 
 \item{y_percentage}{Numeric value specifying by which percentage of the complete y-axis range the annotations should be shifted.}
+
+\item{facet_y_scale}{Should be only used when creating a faceted plot with a free Y-scale.}
 
 \item{extra_lines}{Numeric value specifying how many lines should be added at the bottom of the plot.}
 

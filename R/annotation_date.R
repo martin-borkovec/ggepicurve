@@ -10,7 +10,7 @@
 #'@param text_par List of additional paramaters for the text part of the annotation.
 #'@param line_par List of additional paramaters for the line-separator part of the annotation.
 #'@param format Character string passed to [format.Date()] specifying how the date for the annotation should be formated.
-#'
+#'@param facet_y_scale Should be only used when creating a faceted plot with a free Y-scale.
 #'
 #'
 #'@export
@@ -22,7 +22,7 @@
 #'
 annotation_date <- function(date_unit = "month",
                             y_percentage = 0.075,
-                            y_scale = NULL,
+                            facet_y_scale = NULL,
                             extra_lines = 0,
                             text_par = list(),
                             line_par = list(),
@@ -39,17 +39,17 @@ annotation_date <- function(date_unit = "month",
   params_text <- list(date_unit = date_unit,
                       format = format,
                       y_percentage = y_percentage,
-                      y_scale = y_scale,
+                      facet_y_scale = facet_y_scale,
                       type = "text",
+                      vjust = 0,
                       size = 4)
 
-  # browser()
   params_text <- utils::modifyList(params_text, text_par)
 
   params_segment <- list(date_unit = date_unit,
                          format = format,
                          y_percentage = y_percentage,
-                         y_scale = y_scale,
+                         facet_y_scale = facet_y_scale,
                          type = "segment",
                          text_size = params_text$size)
 
@@ -87,7 +87,7 @@ StatDateLabel <- ggproto("StatDateLabel", Stat,
                                                   date_unit = NULL,
                                                   format = NULL,
                                                   y_percentage = NULL,
-                                                  y_scale = NULL,
+                                                  facet_y_scale = NULL,
                                                   type = type,
                                                   text_size = NULL) {
 
@@ -119,11 +119,11 @@ StatDateLabel <- ggproto("StatDateLabel", Stat,
                            data.frame(
                              x = cumsum(date_label$n)[-nrow(date_label)] + 0.5,
                              xend = cumsum(date_label$n)[-nrow(date_label)] + 0.5,
-                             y = -y_max * y_percentage  - 0.025 * y_max * text_size / 4,
+                             y = -y_max * y_percentage, # - 0.025 * y_max * text_size / 4,
                              yend = 0)
                          },
                          finish_layer = function(self, data, params) {
-                           if (!is.null(params$y_scale) && params$y_scale == "fixed") data$y = min(data$y)
+                           if (!is.null(params$facet_y_scale) && params$facet_y_scale == "fixed") data$y <- min(data$y)
                            data
                          }
 

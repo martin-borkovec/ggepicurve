@@ -10,13 +10,13 @@ ggepicurve(
   mapping = list(),
   epi_blocks = FALSE,
   date_unit = "day",
-  date_breaks = function(x) x,
   date_labels = function(x) x,
   start_date = NULL,
   end_date = NULL,
   gg_first = NULL,
   col_par = list(),
-  x_scale = NULL
+  x_scale = NULL,
+  suggested_theme = TRUE
 )
 }
 \arguments{
@@ -31,19 +31,33 @@ ggepicurve(
 \item{date_unit}{Should the data be aggregated? Defaults to "day" (i.e. no aggregation). Other possible values are "week", "month", "quarter" and "year".
 All cases of the respective date unit will be aggregated on the X-axis to its first day (except for "week" in which case the Thursday of each week will be the aggregation point).}
 
-\item{start_date}{Start date of x axis. Character string in "YYYY-MM-DD" format.}
+\item{date_labels}{Will be passed to \link[ggplot2:scale_discrete]{ggplot2::scale_x_discrete} as the labels argument. If a function is passed, the input will be the dates on the X-axis as a \strong{character} vector.}
 
-\item{end_date}{End date of x axis. Character string in "YYYY-MM-DD" format.}
+\item{start_date}{Start date of X-axis. Character string in "YYYY-MM-DD" format.}
+
+\item{end_date}{End date of X-axis. Character string in "YYYY-MM-DD" format.}
 
 \item{gg_first}{List of gg objects to plot before (backgorund of) the epicurve.}
 
 \item{col_par}{Additional parameters for the geom_col call.}
 
+\item{suggested_theme}{Should suggested \code{\link[ggplot2:theme]{ggplot2::theme()}} adjustments be performed? Defaults to TRUE. See Details.}
+
 \item{facet_x_scale}{Should be only used when creating a faceted plot with a free x scale.}
 }
+\value{
+ggepicurve returns a gg object consisiting of a call to at least \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}, \code{\link[ggplot2:scale_discrete]{ggplot2::scale_x_discrete()}}, \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}} and \code{\link[ggepicurve:::stat_epicurve]{ggepicurve::::stat_epicurve()}}.
+Additional gg objects can be added as usual with "+" but are not guaranteed to work. (e.g. \code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} should work properly, but \code{\link[ggplot2:facet_grid]{ggplot2::facet_grid()}} often causes problems)
+}
 \description{
-some text
+ggepicurve takes a data set of case based epidemiological data. This data set has to contain one column of the class \link{Date} by which the curve (actually columns) will be plotted.
+This column is internally transformed into a factor so keep that in mind for any transformations of the X-axis labels.
 }
 \details{
-some more text
+\strong{suggested_theme} adjusts the following theme elements:
+text = element_text(size = 12), panel.border = element_blank(), panel.background = element_rect(fill = NA), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
+panel.grid.major.y = element_line(colour = "lightgrey"), panel.grid.minor.y = element_blank(), plot.title = element_text(face = "bold", vjust = 0.5, hjust = 0.5), axis.title = element_text(face = "bold"), axis.text.x = element_text(angle = 40, hjust = 1, vjust = 1), legend.position = "top", legend.direction = "horizontal")
+}
+\seealso{
+\code{\link[=annotation_date]{annotation_date()}} for creating pretty X-axis annotations based on week, month, quarter or year.
 }

@@ -47,7 +47,7 @@ ggepicurve(dat,
            start_date = "2011-05-01",
            end_date = "2011-06-30",
            date = "date",
-           date_labels = labels_days(4)
+           date_labels = labels_format(skip = 1, format = "%d")
 )
 ```
 

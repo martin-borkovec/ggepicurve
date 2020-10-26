@@ -28,7 +28,8 @@ ggepicurve(
 
 \item{epi_blocks}{Schould each case be plotted as a separate block? Can be TRUE, FALSE or a numeric. If it's a numeric, blocks will be drawn if the highest case count of the panel doesn't surpass its value.}
 
-\item{date_unit}{Should the data be aggregated? Defaults to "day" (i.e. no aggregation). Other possible values are "week", "month", "quarter" and "year".}
+\item{date_unit}{Should the data be aggregated? Defaults to "day" (i.e. no aggregation). Other possible values are "week", "month", "quarter" and "year".
+All cases of the respective date unit will be aggregated on the X-axis to its first day (except for "week" in which case the Thursday of each week will be the aggregation point).}
 
 \item{start_date}{Start date of x axis. Character string in "YYYY-MM-DD" format.}
 

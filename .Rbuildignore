@@ -1,3 +1,5 @@
 ^ggepicurve\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+inst/df_cases.RDS
+inst/generate_df_cases.R

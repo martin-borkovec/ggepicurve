@@ -9,6 +9,8 @@
 #'@param date Name of column which contains date by which cases are to be plotted.
 #'@param epi_blocks Schould each case be plotted as a separate block? Can be TRUE, FALSE or a numeric. If it's a numeric, blocks will be drawn if the highest case count of the panel doesn't surpass its value.
 #'@param date_unit Should the data be aggregated? Defaults to "day" (i.e. no aggregation). Other possible values are "week", "month", "quarter" and "year".
+#' All cases of the respective date unit will be aggregated on the X-axis to its first day (except for "week" in which case the Thursday of each week will be the aggregation point).
+#'
 #'@param date_breaks
 #'@param date_labels
 #'@param start_date Start date of x axis. Character string in "YYYY-MM-DD" format.
@@ -40,17 +42,31 @@ ggepicurve <- function(data,
 
   # input checks ------------------------------------------------------------
 
+  checkmate::assert_data_frame(data)
 
-  checkmate::assert_subset(date_unit,c(
-    "day",
-    "week",
-    "month",
-    "quarter",
-    "year",
-    "custom"))  # custom not worked out yet
+  if (!missing(mapping) && !inherits(mapping, "uneval")) {
+    abort("Mapping should be created with `aes()` or `aes_()`.")
+  }
+
+  if(is.logical(epi_blocks))
+    checkmate::check_logical(epi_blocks, any.missing = FALSE, len = 1)
+  else
+    checkmate::check_number(epi_blocks, lower = 0)
+
+  checkmate::assert_subset(date_unit,
+                           c("day",
+                             "week",
+                             "month",
+                             "quarter",
+                             "year",
+                             "custom"))  # custom not worked out yet
 
   # checkmate::assert_subset(color_scheme,c("bundesland", "covid_quelle"))
   checkmate::assert_subset(date, names(data), empty.ok = FALSE)
+
+  checkmate::assert_list(gg_first, null.ok = TRUE)
+  checkmate::assert_list(col_par, null.ok = FALSE)
+  checkmate::assert_choice(x_scale, c("year", "free"), null.ok = TRUE)
 
 
 
@@ -60,10 +76,14 @@ ggepicurve <- function(data,
   # label_aes <- enquo(label_aes)
 
   data$date_used <- data[[date]]
-  if (!is.null(start_date) & is.character(start_date))
+  if (!is.null(start_date)) {
+    checkmate::assert_date(as.Date(start_date))
     start_date <- as.Date(start_date)
-  if (!is.null(end_date) & is.character(end_date))
+  }
+  if (!is.null(end_date)) {
+    checkmate::assert_date(as.Date(end_date))
     end_date <- as.Date(end_date)
+  }
 
 
   # get factor date_range with levels for each possible  value --------------
@@ -103,7 +123,7 @@ ggepicurve <- function(data,
   col_par <- utils::modifyList(col_par0, col_par)
   col_par$mapping <- utils::modifyList(col_par$mapping, mapping)
 
-  gg <- gg + do.call(ggepicurve:::stat_epicurve, col_par)
+  gg <- gg + do.call(stat_epicurve, col_par)
 
   # add labels if set (only with episquares)
   # if (!quo_is_null(label_aes)) {

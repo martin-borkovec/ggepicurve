@@ -49,7 +49,9 @@ ggepicurve(data = dat,
                   text_par = list(fontface = "bold", size = 10),
                   line_par = list(size = 1.5)
                   ) +
-  facet_wrap(facets = "death", scales = "free_x", nrow = 2, labeller = label_both)
+  facet_wrap(facets = "death", scales = "free_x", nrow = 2, labeller = label_both) +
+  theme(strip.text = element_text(size = 12),
+        legend.text = element_text(size = 12))
 ```
 
 ![](man/figures/README-unnamed-chunk-3-1.png)<!-- -->

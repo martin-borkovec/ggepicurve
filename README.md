@@ -17,6 +17,11 @@ Make sure to checkout the vignette.
 vignette("ggepicurve", package = "ggepicurve")
 ```
 
+## Bugs and Feature Requests
+
+Don’t hesitate to post any problems, questions or suggestions in the
+issues section of this project.
+
 ## Example
 
 ``` r
@@ -35,16 +40,14 @@ ggepicurve(data = dat,
   annotation_date(date_unit = "month",
                   format = "%b",
                   y_percentage = 0.1,
-                  text_par = list(size = 7),
-                  facet_y_scale = "fixed"
+                  text_par = list(size = 7)
                   ) +
   annotation_date(date_unit = "year",
                   format = "%Y",
-                  y_percentage = 0.2,
+                  y_percentage = 0.22,
                   extra_lines = 5,
-                  text_par = list(fontface = "bold", size = 11),
-                  line_par = list(size = 1.5),
-                  facet_y_scale = "fixed"
+                  text_par = list(fontface = "bold", size = 10),
+                  line_par = list(size = 1.5)
                   ) +
   facet_wrap(facets = "death", scales = "free_x", nrow = 2, labeller = label_both)
 ```

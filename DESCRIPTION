@@ -1,6 +1,6 @@
 Package: ggepicurve
 Title: Plots of case based epidemiological data
-Version: 0.0.0.9001
+Version: 0.0.0.9003
 Authors@R: c(
     person("Martin", "Borkovec", role = c("aut", "cre"), email = "martin.borkovec@skyforge.at"),
     person("Lukas", "Richter", role = c("aut"))

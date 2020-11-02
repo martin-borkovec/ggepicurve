@@ -1,5 +1,5 @@
 stat_epicurve <- function(mapping = NULL, data = NULL,
-                          geom = "pointrange", position = "identity",
+                          geom = "col", position = "identity",
                           ...,
                           max_squares = NULL,
                           x_scale = NULL,
@@ -75,5 +75,6 @@ StatEpicurve <- ggproto("StatEpicurve", Stat,
                         }
 
                         out_dat
+
                         }
 )

@@ -73,7 +73,8 @@ dat <- dat0[dat0$date <= as.Date("2012-01-30") & dat0$date > as.Date("2011-05-01
 ```{r}
 ggepicurve(dat,
            date = "date") +
-  theme(axis.text.x = element_blank()) +
+  theme(axis.text.x = element_blank(),
+        axis.ticks = element_blank()) +
   annotation_date(date_unit = "month", format = "%b", y_percentage = 0.05) +
   annotation_date(date_unit = "year", format = "%Y", y_percentage = 0.15, extra_lines = 2)
 ```
@@ -83,26 +84,27 @@ ggepicurve(dat,
 ggepicurve(dat,
            date_unit = "week",
            date = "date",
-           date_labels =  function(x) format(as.Date(x), "%W")) +
-  annotation_date(date_unit = "month", format = "%b", y_percentage = 0.15) +
-  annotation_date(date_unit = "year", format = "%Y", y_percentage = 0.25, extra_lines = 2)
+           date_labels =  labels_format("%ISOW")) +
+  xlab("\n \n \n Calendar week of infection") +
+  annotation_date(date_unit = "month", format = "%b", y_percentage = 0.225) +
+  annotation_date(date_unit = "year", format = "%Y", y_percentage = 0.35, extra_lines = 1)
 ```
+
 ```{r}
 ggepicurve(dat,
            date_unit = "month",
            date = "date",
-           date_labels =  function(x) format(as.Date(x), "%b")) +
-  annotation_date(date_unit = "year", format = "%Y", y_percentage = 0.15, extra_lines = 2)
+           date_labels =  labels_format("%b")) +
+  annotation_date(date_unit = "year", format = "%Y", y_percentage = 0.3, extra_lines = 2)
 ```
 
 ```{r}
 ggepicurve(dat0,
            date_unit = "month",
            date = "date",
-           date_labels =  function(x) format(as.Date(x), "%b"),
-           ) +
+           date_labels =  labels_format("%b")) +
   theme(axis.text.x = element_blank()) +
-  annotation_date(date_unit = "year", format = "%Y", y_percentage = 0.15, extra_lines = 2) +
+  annotation_date(date_unit = "year", format = "%Y", y_percentage = 0.2, extra_lines = 1) +
   facet_wrap(vars(region)) 
 ```
 
@@ -115,8 +117,11 @@ ggepicurve(dat0,
            x_scale = "free"
            ) +
   theme(axis.text.x = element_blank()) +
-  annotation_date(date_unit = "year", format = "%Y", y_percentage = 0.15, extra_lines = 2, fixed_y_scale = FALSE) +
+  annotation_date(date_unit = "year", format = "%Y", y_percentage = 0.2, extra_lines = 1, fixed_y_scale = FALSE) +
   facet_wrap(vars(region), scales = "free") 
+
+
+
 ```
 
 
@@ -125,12 +130,36 @@ ggepicurve(dat0[dat0$date > as.Date("2010-06-01")
                 & dat0$date < as.Date("2012-12-31"), ],
            date_unit = "day",
            date = "date",
-           # date_labels =  function(x) format(as.Date(x), "%b"),
-           x_scale = "year"
-) +
-  theme(axis.text.x = element_blank()) +
+           x_scale = "year") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
   facet_wrap(vars(year), scales = "free", ncol = 1) +
   annotation_date(date_unit = "month", format = "%B", y_percentage = 0.15, extra_lines = 2, fixed_y_scale = FALSE)
 
+```
+```{r, fig.height=7}
+ggepicurve(dat0,
+           date_unit = "year",
+           date = "date",
+           mapping = aes(fill = region),
+           date_labels = labels_format("%Y"),
+           col_par = list(position = position_fill())) +
+  scale_y_continuous(name = "Percentage", expand = c(0, 0)) +
+  xlab("Year of Infection")
+```
+
+```{r, fig.height=7}
+dat <- dat0[dat0$date <= as.Date("2011-06-01") & dat0$date > as.Date("2011-05-01"),]
+ggepicurve(dat,
+           date_unit = "day",
+           date = "date",
+           # mapping = aes(fill = region),
+           date_labels = labels_format("%d"),
+           col_par = list(geom = "line"))
+  
+  p + geom_line(inherit.aes = FALSE,
+                mapping = aes(x = .date_unit, y = stat(count), group = .date_unit),
+                stat = "count")
+  
 ```
 

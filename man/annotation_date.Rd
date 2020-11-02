@@ -20,7 +20,8 @@ annotation_date(
 \item{y_percentage}{Numeric value specifying by which percentage of the complete Y-axis the annotations should be shifted.
 This value will most likely need fine tuning for each graphic device but is independent of the number of cases.}
 
-\item{extra_lines}{Numeric value (i.e. unit lines) specifying how much extra space for the annotations should be added at the bottom of the plot.}
+\item{extra_lines}{Numeric value (i.e. unit lines) specifying how much extra space for the annotations should be added at the bottom of the plot.
+If annotation_date is added multiple times (e.g. for months and years) the last extra_lines value overwrites all previous ones.}
 
 \item{text_par}{List of additional parameters for the text part of the annotation.}
 

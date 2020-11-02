@@ -10,7 +10,12 @@ my_pretty_breaks <- function (n = 5) {
 }
 
 #' @export
-labels_format <- function(skip = 0, format = NULL){
+#'
+#' @param format format argument for [format.Date()]. Additionally takes "%ISOW" to convert to ISO week with [ISOweek::ISOweek()]
+#' @param skip Number of labels to skip after first and each subsequent displayed label.
+
+
+labels_format <- function(format = NULL, skip = 0){
 
   n_default <- skip + 1
   format_default <- format
@@ -18,7 +23,7 @@ labels_format <- function(skip = 0, format = NULL){
   function(x, n = n_default, format = format_default) {
 
     if(!is.null(format))
-      x <- format(as.Date(x), format)
+      x <- ISOformat(as.Date(x), format)
 
     out <- character(length(x))
     out[c(1, 1:((length(x) - 1) / n) * n + 1)]  <- x[c(1, 1:((length(x) - 1) / n) * n + 1)]

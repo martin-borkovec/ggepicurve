@@ -5,7 +5,7 @@
 #'
 #'@details **suggested_theme** adjusts the following theme elements:
 #' text = element_text(size = 12), panel.border = element_blank(), panel.background = element_rect(fill = NA), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
-#' panel.grid.major.y = element_line(colour = "lightgrey"), panel.grid.minor.y = element_blank(), plot.title = element_text(face = "bold", vjust = 0.5, hjust = 0.5), axis.title = element_text(face = "bold"), axis.text.x = element_text(angle = 40, hjust = 1, vjust = 1), legend.position = "top", legend.direction = "horizontal")
+#' panel.grid.major.y = element_line(colour = "lightgrey"), panel.grid.minor.y = element_blank(), plot.title = element_text(face = "bold", vjust = 0.5, hjust = 0.5), axis.text.x = element_text(angle = 40, hjust = 1, vjust = 1), legend.position = "top", legend.direction = "horizontal")
 #'
 #'@return ggepicurve returns a gg object consisiting of a call to at least [ggplot2::ggplot()], [ggplot2::scale_x_discrete()], [ggplot2::scale_y_continuous()] and [ggepicurve:::stat_epicurve()].
 #' Additional gg objects can be added as usual with "+" but are not guaranteed to work. (e.g. [ggplot2::facet_wrap()] should work properly, but [ggplot2::facet_grid()] often causes problems)
@@ -38,7 +38,6 @@ ggepicurve <- function(data,
                        mapping = list(),
                        epi_blocks = FALSE,
                        date_unit = "day",
-                       # date_breaks = function(x) x,
                        date_labels = function(x) x,
                        start_date = NULL,
                        end_date = NULL,
@@ -136,27 +135,15 @@ ggepicurve <- function(data,
 
   gg <- gg + do.call(stat_epicurve, col_par)
 
-  # add labels if set (only with episquares)
-  # if (!quo_is_null(label_aes)) {
-  #   if (epi_blocks) {
-  #     gg <- gg + geom_text(aes(label = !!label_aes, y = 1, group = !!fill_aes),
-  #                          position = position_stack(vjust = 0.5))
-  #   } else {
-  #     warning("epi_blocks must be TRUE if label is to be printed")
-  #   }
-  #
-  # }
-
-
   # add rest of stuff -------------------------------------------------------
   gg <- gg +
-    scale_x_discrete("",
-                     # breaks = date_breaks,
-                     labels = date_labels,
+    scale_x_discrete(labels = date_labels,
                      drop = FALSE,
                      na.translate = FALSE) +
-    scale_y_continuous("",
-                       expand = c(0, 0), breaks = my_pretty_breaks(10))
+    scale_y_continuous(expand = c(0, 0),
+                       breaks = my_pretty_breaks(10)) +
+    labs(x = "",
+         y = "Cases")
 
   if(suggested_theme)
   gg <- gg +
@@ -168,7 +155,6 @@ ggepicurve <- function(data,
           panel.grid.major.y = element_line(colour = "lightgrey"),
           panel.grid.minor.y = element_blank(),
           plot.title = element_text(face = "bold", vjust = 0.5, hjust = 0.5),
-          axis.title = element_text(face = "bold"),
           axis.text.x = element_text(angle = 40, hjust = 1, vjust = 1),
           legend.position = "top",
           legend.direction = "horizontal")

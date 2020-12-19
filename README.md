@@ -6,8 +6,7 @@ plotting epicurves with **ggplot2**
 ## Install
 
 ``` r
-devtools::install_github("martin-borkovec/ggepicurve", 
-                         dependencies = TRUE,
+devtools::install_github("martin-borkovec/ggepicurve@ggplot-3-2-1", 
                          build_vignettes = TRUE)
 ```
 

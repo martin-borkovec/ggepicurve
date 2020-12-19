@@ -137,6 +137,7 @@ ggepicurve(dat0[dat0$date > as.Date("2010-06-01")
   annotation_date(date_unit = "month", format = "%B", y_percentage = 0.15, extra_lines = 2, fixed_y_scale = FALSE)
 
 ```
+
 ```{r, fig.height=7}
 ggepicurve(dat0,
            date_unit = "year",
@@ -146,20 +147,5 @@ ggepicurve(dat0,
            col_par = list(position = position_fill())) +
   scale_y_continuous(name = "Percentage", expand = c(0, 0)) +
   xlab("Year of Infection")
-```
-
-```{r, fig.height=7}
-dat <- dat0[dat0$date <= as.Date("2011-06-01") & dat0$date > as.Date("2011-05-01"),]
-ggepicurve(dat,
-           date_unit = "day",
-           date = "date",
-           # mapping = aes(fill = region),
-           date_labels = labels_format("%d"),
-           col_par = list(geom = "line"))
-  
-  p + geom_line(inherit.aes = FALSE,
-                mapping = aes(x = .date_unit, y = stat(count), group = .date_unit),
-                stat = "count")
-  
 ```
 

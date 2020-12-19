@@ -57,7 +57,7 @@ This column is internally transformed into a factor so keep that in mind for any
 \details{
 \strong{suggested_theme} adjusts the following theme elements:
 text = element_text(size = 12), panel.border = element_blank(), panel.background = element_rect(fill = NA), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
-panel.grid.major.y = element_line(colour = "lightgrey"), panel.grid.minor.y = element_blank(), plot.title = element_text(face = "bold", vjust = 0.5, hjust = 0.5), axis.title = element_text(face = "bold"), axis.text.x = element_text(angle = 40, hjust = 1, vjust = 1), legend.position = "top", legend.direction = "horizontal")
+panel.grid.major.y = element_line(colour = "lightgrey"), panel.grid.minor.y = element_blank(), plot.title = element_text(face = "bold", vjust = 0.5, hjust = 0.5), axis.text.x = element_text(angle = 40, hjust = 1, vjust = 1), legend.position = "top", legend.direction = "horizontal")
 }
 \seealso{
 \code{\link[=annotation_date]{annotation_date()}} for creating pretty X-axis annotations based on week, month, quarter or year.

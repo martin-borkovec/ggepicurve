@@ -1,7 +1,7 @@
 ggepicurve
 ================
 
-plotting epicurves with **ggplot2**
+plotting epicurves with **ggplot2** version 3.2.1.
 
 ## Install
 

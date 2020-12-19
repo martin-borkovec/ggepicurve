@@ -75,7 +75,7 @@ annotation_date <- function(date_unit = "month",
       params = params_segment),
     theme(panel.spacing = unit(extra_lines, "lines"),
           plot.margin = unit(c(0, 0, extra_lines, 0), "lines")),
-    coord_cartesian(clip = "off", ylim = c(0, NA)))
+    coord_cartesian0(clip = "off"))
 }
 
 
